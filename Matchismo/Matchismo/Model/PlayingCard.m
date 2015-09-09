@@ -22,6 +22,29 @@
             score = 1;
         }
     }
+    else if ([otherCards count]==2)
+    {
+        PlayingCard *otherCard1 = [otherCards firstObject];
+        PlayingCard *otherCard2 = [otherCards lastObject];
+        //三數字同
+        if(otherCard1.rank == otherCard2.rank && otherCard2.rank == self.rank)
+        {
+            score += 6;
+        } else if(otherCard1.rank == otherCard2.rank || otherCard2.rank == self.rank || otherCard1.rank==self.rank)
+        {
+            //兩數字同
+            score += 3;
+        }
+        //三花色同
+        if([otherCard1.suit isEqualToString:otherCard2.suit] && [otherCard2.suit isEqualToString:self.suit])
+        {
+            score += 4;
+        } else if([otherCard1.suit isEqualToString:otherCard2.suit] || [otherCard2.suit isEqualToString:self.suit] || [otherCard1.suit isEqualToString:self.suit])
+        {
+            //兩花色同
+            score += 2;
+        }
+    }
     return score;
 }
 

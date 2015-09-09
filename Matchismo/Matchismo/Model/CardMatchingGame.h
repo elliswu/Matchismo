@@ -15,10 +15,16 @@
 -(instancetype)initWithCardCount:(NSInteger)count
                        usingDeck:(Deck *)deck;
 
+-(instancetype)initWithCardCount:(NSInteger)count
+                       usingDeck:(Deck *)deck
+                  chooseCardMode:(NSInteger *)cardMode;
+
 -(void)chooseCardAtIndex:(NSUInteger)index;
 
 -(Card *) cardAtIndex:(NSUInteger *)index;
 
-@property (nonatomic,readonly) NSInteger score ;
+-(void) reDealGame;
 
+@property (nonatomic,readonly) NSInteger score ;
+@property (nonatomic,readonly) NSString *descriptions;
 @end

@@ -15,6 +15,10 @@
 @property (strong,nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UIButton *reDealButton;
+@property (weak, nonatomic) IBOutlet UISwitch *matchMode; //On:3  Off:2
+@property (weak, nonatomic) IBOutlet UILabel *playMessage;
+
 @end
 
 @implementation ViewController
@@ -22,11 +26,12 @@
 -(CardMatchingGame *)game
 {
     if (!_game) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]  usingDeck:[self createDeck]];
+        NSInteger cardMode = self.matchMode.isOn ? 3:2 ;
+        NSLog(@"game init cardMode = %d",cardMode) ;
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]  usingDeck:[self createDeck] chooseCardMode:cardMode];
     }
     return _game;
 }
-
 
 -(Deck *)createDeck
 {
@@ -34,10 +39,21 @@
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
+
+    [self.matchMode setEnabled:FALSE];
     int chooseButtonIndex = [self.cardButtons indexOfObjectIdenticalTo:sender];
     [self.game chooseCardAtIndex:chooseButtonIndex];
     [self UpdateUI];
     
+}
+- (IBAction)touchReDealGame:(id)sender {
+    [self.matchMode setEnabled:TRUE];
+    //分數歸零 重新發牌
+    self.game = nil;
+    [self UpdateUI];
+}
+- (IBAction)modeChange:(id)sender {
+    self.game = nil;
 }
 
 -(void)UpdateUI
@@ -50,6 +66,7 @@
         cardButton.enabled = !card.isMatched;
     }
     self.scoreLabel.text =[NSString stringWithFormat:@"Score: %ld",(long)self.game.score];
+    self.playMessage.text = self.game.descriptions;
 }
 
 -(NSString *)titleForCard:(Card *)card
